@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <img src="https://png.pngtree.com/background/20210716/original/pngtree-cartoon-natural-landscape-background-picture-image_1337835.jpg" alt="Background Image">
+        </div>
+        <div class="right">
+            <h1>Welcome to Student Management System</h1>
+            <nav>
+                <a href="{{ url_for('add_student') }}" class="button">Add Student</a>
+                <a href="{{ url_for('list_students') }}" class="button">List Students</a>
+            </nav>
+        </div>
+    </div>
+</body>
+</html>

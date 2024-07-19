@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Students</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/list.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+    <h1>List Student</h1>
+    <a href="{{ url_for('add_student') }}" class="button">Add Student</a>
+    <table id="students-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Birth Year</th>
+                <th>Class</th>
+                <th>Address</th>
+                <th>Grade</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Student rows will be inserted here by JavaScript -->
+        </tbody>
+    </table>
+    
+</body>
+</html>
