@@ -1,22 +1,49 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // chọn phần tử có ID để lưu trữ trong biến addStudentForm và editStudentForm
     const addStudentForm = document.getElementById('add-student-form');
+    const addStudentModal = document.getElementById('addStudentModal');
+    const openAddStudentFormButton = document.getElementById('openAddStudentForm');
+    const closeModalButton = document.querySelector('.close');
+    
     const editStudentForm = document.getElementById('edit-student-form');
+    const editStudentModal = document.getElementById('editStudentModal');
+    const closeEditModalButton = document.querySelector('.close-edit');
+
+    openAddStudentFormButton.addEventListener('click', function () {
+        addStudentModal.style.display = 'block';
+    });
+
+    closeModalButton.addEventListener('click', function () {
+        addStudentModal.style.display = 'none';
+    });
+
+    closeEditModalButton.addEventListener('click', function () {
+        editStudentModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', function (event) {
+        if (event.target == addStudentModal) {
+            addStudentModal.style.display = 'none';
+        } else if (event.target == editStudentModal) {
+            editStudentModal.style.display = 'none';
+        }
+    });
 
     if (addStudentForm) {
-        addStudentForm.addEventListener('submit', function (event) { //thêm trình xử lý sự kiện vào biểu mẫu 
+        addStudentForm.addEventListener('submit', function (event) {
             event.preventDefault();
-            const formData = new FormData(addStudentForm); // tạo đối tượng FormData từ biểu mẫu 
-            fetch('/api/students', { //gửi yêu cầu tới API theo phương thức POST
+            const formData = new FormData(addStudentForm);
+            fetch('/api/students', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json()) // chuyển đổi  phản hồi thành JSON và kiểm tra thao tác có thành côn hay không
+            .then(response => response.json())
             .then(data => {
-                if (data.success) { // nếu thành công thì hiển thị đến trang list_student
-                    alert('Student added successfully!'); 
-                    window.location.href = '/list_students';
-                } else { // ngược lại sẽ báo lỗi
+                if (data.success) {
+                    alert('Student added successfully!');
+                    fetchStudents();
+                    addStudentModal.style.display = 'none';
+                    addStudentForm.reset();
+                } else {
                     alert('Failed to add student.');
                 }
             });
@@ -24,101 +51,92 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (editStudentForm) {
-        editStudentForm.addEventListener('submit', function (event) { // thêm trình xử lý sự kiện vào biểu mẫu 
+        editStudentForm.addEventListener('submit', function (event) {
             event.preventDefault();
-            const studentId = document.getElementById('student_id').value; // lấy Id sinh viên từ trường ẩn 
-            const formData = new FormData(editStudentForm); //Tạo đối tượng FormData từ biểu mẫu.
-            const jsonData = {};
-            formData.forEach((value, key) => { jsonData[key] = value }); //Chuyển đổi FormData thành đối tượng JSON đơn giản.
+            const formData = new FormData(editStudentForm);
+            const studentId = document.getElementById('edit-student-id').value;
 
-            fetch(`/api/students/${studentId}`, { // gửi yêu cầu tới API theo phương thức PUT 
+            fetch(`/api/students/${studentId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(jsonData)
+                body: JSON.stringify(Object.fromEntries(formData))
             })
-            .then(response => response.json()) //kiểm tra 
+            .then(response => response.json())
             .then(data => {
-                if (data.success) { // nếu thành công thì đẩy ra trang list_student
+                if (data.success) {
                     alert('Student updated successfully!');
-                    window.location.href = '/list_students'; 
-                } else { // ngược lại thì fail
+                    fetchStudents();
+                    editStudentModal.style.display = 'none';
+                    editStudentForm.reset();
+                } else {
                     alert('Failed to update student.');
                 }
             });
         });
     }
 
-    const studentsTable = document.getElementById('students-table'); // chọn phần tử có ID students-table để lưu trữ trong biến studentsTable
-    if (studentsTable) {
-        fetch('/api/students') // gửi yêu cầu tới API để lấy thông tin sinh viên theo phương thức GET 
-        .then(response => response.json()) // chuyển đổi phản hồi thành JSON 
-        .then(data => {
-            const tbody = studentsTable.querySelector('tbody'); //cập nhật nội dung của biến tbody 
-            tbody.innerHTML = '';
-            data.students.forEach(student => {
-                const row = document.createElement('tr'); // tạo hàng cho từng thông tin của sinh viên 
-                row.innerHTML = `
-                    <td>${student.name}</td>
-                    <td>${student.birth_year}</td>
-                    <td>${student.class_}</td>
-                    <td>${student.address}</td>
-                    <td>${student.grade}</td>
-                    <td>
-                        <button onclick="editStudent(${student.id})">Edit</button>
-                        <button onclick="deleteStudent(${student.id})">Delete</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
+    function fetchStudents() {
+        const studentsTable = document.getElementById('students-table');
+        if (studentsTable) {
+            fetch('/api/students')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = studentsTable.querySelector('tbody');
+                tbody.innerHTML = '';
+                data.students.forEach(student => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${student.name}</td>
+                        <td>${student.birth_year}</td>
+                        <td>${student.class_}</td>
+                        <td>${student.address}</td>
+                        <td>${student.grade}</td>
+                        <td>
+                            <button onclick="editStudent(${student.id})">Edit</button>
+                            <button onclick="deleteStudent(${student.id})">Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
             });
-        });
+        }
     }
+
+    fetchStudents();
 });
 
 function editStudent(studentId) {
-    fetch(`/api/students/${studentId}`) // gửi yêu cầu lấy thông tin tới API bằng phương thức GET
-        .then(response => response.json()) // chuyển đổi phản hồi thành JSON 
+    fetch(`/api/students/${studentId}`)
+        .then(response => response.json())
         .then(data => {
             if (data.success) {
                 const student = data.student;
-
-                //Lưu trữ thông tin chi tiết về sinh viên trong sessionStorage trước khi chuyển hướng
-                sessionStorage.setItem('student', JSON.stringify(student)); 
-
-                //chuyển đến trang chỉnh sửa
-                window.location.href = `/edit_student`;
+                document.getElementById('edit-student-id').value = student.id;
+                document.getElementById('edit-name').value = student.name;
+                document.getElementById('edit-birth_year').value = student.birth_year;
+                document.getElementById('edit-class_').value = student.class_;
+                document.getElementById('edit-address').value = student.address;
+                document.getElementById('edit-grade').value = student.grade;
+                document.getElementById('editStudentModal').style.display = 'block';
             } else {
                 alert('Failed to fetch student details.');
             }
         });
 }
-// thực hti khi tải trang 
-window.onload = function() {
-    if (window.location.pathname === '/edit_student') {  //nếu đang ở trang edit 
-        const student = JSON.parse(sessionStorage.getItem('student')); //xuất dữ liệu từ sessionStorage 
-        if (student) { //và điền thông tin chi tiết về sinh viên vào biểu mẫu 
-            document.getElementById('student_id').value = student.id;
-            document.getElementById('name').value = student.name;
-            document.getElementById('birth_year').value = student.birth_year;
-            document.getElementById('class_').value = student.class_;
-            document.getElementById('address').value = student.address;
-            document.getElementById('grade').value = student.grade;
-        }
-    }
-}
 
 function deleteStudent(studentId) {
-    if (confirm('Are you sure you want to delete this student?')) { // hỏi có chắc chắn muốn xoá không
-        fetch(`/api/students/${studentId}`, { //gửi yêu cầu xoá tới API 
+    if (confirm('Are you sure you want to delete this student?')) {
+        fetch(`/api/students/${studentId}`, {
             method: 'DELETE'
         })
-        .then(response => response.json()) //chuyển đổi phản hồi thành dạng JSON 
+        .then(response => response.json())
         .then(data => {
-            if (data.success) { // nếu thành công sẽ xoá và cập nhật lại danh sách
+            if (data.success) {
                 alert('Student deleted successfully!');
                 window.location.reload();
-            } else { // ngược lại 
+            } else {
                 alert('Failed to delete student.');
             }
         });

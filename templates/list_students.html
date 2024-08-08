@@ -3,59 +3,107 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>List Students</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/list.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/add.css') }}">
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <script src="static/js/script.js"></script>
+    <title>Student Management</title>
 
 </head>
 
 <body>
-    <h1>List of Students</h1>
-    <button id="openAddStudentForm">Add Student</button>
-    <table id="students-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Birth Year</th>
-                <th>Class</th>
-                <th>Address</th>
-                <th>Grade</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Student rows will be populated here by JavaScript -->
-        </tbody>
-    </table>
-
-    <!-- The Modal -->
-    <div id="addStudentModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Add Student</h2>
-            <form id="add-student-form" class="">
-                <div class="form-left">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required><br>
-                    <label for="birth_year">Birth Year:</label>
-                    <input type="number" id="birth_year" name="birth_year" required><br>
-                    <label for="class_">Class:</label>
-                    <input type="text" id="class_" name="class" required><br>
-                    <label for="address">Address:</label>
-                    <input type="text" id="address" name="address" required><br>
-                    <label for="grade">Grade:</label>
-                    <input type="number" id="grade" name="grade" required><br>
-                    <button type="submit">Add Student</button>
-                </div>
-                <div class="form-right">
-                    <img src="http://webcoban.vn/image/flower.gif">
-                </div>
-            </form>
+    <div class="header">
+        <div class="logo">
+            <img src="https://sport5.mediacdn.vn/thumb_w/480/158855217956261888/2022/3/9/logo-clb-hai-phong-1646820518238831449951.jpeg"
+                alt="Logo" />
+        </div>
+        <div class="text">
+            <p>Student Management</p>
+        </div>
+        <div class="button-header">
+            <button id="openAddStudentForm">Add Student</button>
         </div>
     </div>
 
-    
+    <div class="content">
+        <table id="students-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Birth Year</th>
+                    <th>Class</th>
+                    <th>Address</th>
+                    <th>Grade</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Student rows will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+
+    </div>
+    <!-- Add Student Modal -->
+    <div id="addStudentModal" class="modal">
+        <div class="modal-content">
+            <div class="head-modal">
+                <h2>Add Student</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="bottom-modal">
+                <form id="add-student-form" class="left-box">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required><br><br>
+                    <label for="birth_year">Birth Year:</label>
+                    <input type="number" id="birth_year" name="birth_year" required><br><br>
+                    <label for="class_">Class:</label>
+                    <input type="text" id="class_" name="class" required><br><br>
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" required><br><br>
+                    <label for="grade">Grade:</label>
+                    <input type="number" id="grade" name="grade" required><br><br>
+                    <button type="submit">Add Student</button>
+                </form>
+                <div class="right-box">
+                    <img src="https://sport5.mediacdn.vn/thumb_w/480/158855217956261888/2022/3/9/logo-clb-hai-phong-1646820518238831449951.jpeg"
+                        alt="Logo" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Edit Student Modal -->
+    <div id="editStudentModal" class="modal">
+        <div class="modal-content">
+            <div class="head-modal">
+                <h2>Edit Student</h2>
+                <span class="close-edit">&times;</span>
+            </div>
+            <div class="bottom-modal">
+                <form id="edit-student-form" class="left-box">
+                    <input type="hidden" id="edit-student-id" name="id">
+                    <label for="edit-name">Name:</label>
+                    <input type="text" id="edit-name" name="name" required><br><br>
+                    <label for="edit-birth_year">Birth Year:</label>
+                    <input type="number" id="edit-birth_year" name="birth_year" required><br><br>
+                    <label for="edit-class_">Class:</label>
+                    <input type="text" id="edit-class_" name="class_" required><br><br>
+                    <label for="edit-address">Address:</label>
+                    <input type="text" id="edit-address" name="address" required><br><br>
+                    <label for="edit-grade">Grade:</label>
+                    <input type="number" id="edit-grade" name="grade" required><br><br>
+                    <button type="submit">Update Student</button>
+                </form>
+                <div class="right-box">
+                    <img src="https://sport5.mediacdn.vn/thumb_w/480/158855217956261888/2022/3/9/logo-clb-hai-phong-1646820518238831449951.jpeg"
+                        alt="Logo" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 
 </body>
 
