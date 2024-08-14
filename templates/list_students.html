@@ -27,21 +27,21 @@
 
     <div class="content">
         <table id="students-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Birth Year</th>
-                    <th>Class</th>
-                    <th>Address</th>
-                    <th>Grade</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Student rows will be inserted here by JavaScript -->
-            </tbody>
-        </table>
-
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Birth Year</th>
+                <th>Class</th>
+                <th>Address</th>
+                <th>Grade</th>
+                <th>Topic</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Students will be populated here by JavaScript -->
+        </tbody>
+    </table>
     </div>
     <!-- Add Student Modal -->
     <div id="addStudentModal" class="modal">
@@ -93,6 +93,7 @@
                     <input type="text" id="edit-address" name="address" required><br><br>
                     <label for="edit-grade">Grade:</label>
                     <input type="number" id="edit-grade" name="grade" required><br><br>
+                  
                     <button type="submit">Update Student</button>
                 </form>
                 <div class="right-box">
@@ -104,6 +105,25 @@
         </div>
     </div>
 
+    <!-- Modal Gán Topic -->
+    <div id="assignTopicModal" class="modal">
+        <div class="modal-content">
+            <span class="close-assign">&times;</span>
+            <h2>Gán Topic</h2>
+            <form id="assign-topic-form">
+                <input type="hidden" id="assign-student-id">
+                <label for="topic">Chọn Topic:</label>
+                <select id="topic-select">
+                    <option value="React JS">React JS</option>
+                    <option value="Laravel">Laravel</option>
+                    <option value="Django">Django</option>
+                    <option value="ASP.NET">ASP.NET</option>
+                    <option value="Kế Toán Thuế">Kế Toán Thuế</option>
+                </select>
+                <button type="submit">Gán Topic</button>
+            </form>
+        </div>
+    </div>
 
 </body>
 
