@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="static/js/manage_subject.js"></script>
+    <script  src="static/js/subject.js"></script>
+    <title>Manage Subjects</title>
+</head>
+<body>
+   <h1>Manage Subject</h1>
+
+   <h2>Add New Subject</h2>
+    <form id="add-subject-form">
+        <label for="subject_name">Subject Name:</label>
+        <input type="text" id="subject_name" name="subject_name" required>
+        <button type="submit">Add Subject</button>
+    </form>
+
+    <h2>Add New Topic</h2>
+    <form id="add-topic-form">
+        <label for="topic_name">Topic Name:</label>
+        <input type="text" id="topic_name" name="topic_name" required>
+        <button type="submit">Add Topic</button>
+    </form>
+
+    <h2>Add Topic to Subject</h2>
+    <form id="add-topic-to-subject-form">
+        <label for="subject_id">Select Subject:</label>
+        <select id="subject_id" name="subject_id" required>
+            <!-- Subjects will be populated here by JavaScript -->
+        </select>
+
+        <label for="topic_id">Select Topic:</label>
+        <select id="topic_id" name="topic_id" required>
+            <!-- Topics will be populated here by JavaScript -->
+        </select>
+        <button type="submit">Add Topic to Subject</button>
+    </form>
+
+    <!-- Section to display topics of a selected subject -->
+    <h2>Topics of Selected Subject</h2>
+    <form id="view-topics-form">
+        <label for="view_subject_id">Select Subject:</label>
+        <select id="view_subject_id" name="view_subject_id" required>
+            <!-- Subjects will be populated here by JavaScript -->
+        </select>
+        <button type="button" id="view-topics-button">View Topics</button>
+    </form>
+    <ul id="topics-list">
+        <!-- Topics will be displayed here -->
+    </ul>
+
+</body>
+</html>
