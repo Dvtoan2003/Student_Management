@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="static/js/manage_class.js"></script>
+    <title>Manage Class</title>
+</head>
+<body>
+    <h1>Manage Classes</h1>
+
+    <!-- Form to add a new class -->
+    <form id="add-class-form">
+        <label for="class_name">Class Name:</label>
+        <input type="text" id="class_name" name="class_name" required>
+        <button type="submit">Add Class</button>
+    </form>
+
+    
+    <!-- List of classes -->
+    <h2>Classes</h2>
+    <ul id="class-list">
+        <!-- Classes will be loaded here -->
+    </ul>
+
+    <!-- Students in selected class -->
+    <h2>Students in Selected Class</h2>
+    <ul id="student-list">
+        <!-- Students will be loaded here -->
+    </ul>
+
+</body>
+</html>
