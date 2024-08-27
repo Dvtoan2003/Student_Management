@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
     }
-
     // Function to load students by class ID
     function loadStudentsByClass(classId) {
         fetch(`/api/classes/${classId}/students`)
@@ -32,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
     }
-
     // Event listener for adding a new class
     addClassForm.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -53,5 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
     loadClasses();
 });
