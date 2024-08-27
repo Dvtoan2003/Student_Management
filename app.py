@@ -145,7 +145,7 @@ def delete_student(student_id):
         return jsonify({"success": False})
 
 
-#API for class
+#API for classes
 @app.route('/api/classes', methods=['GET'])
 def get_classes():
     classes = Class.query.all()
@@ -188,7 +188,7 @@ def add_subject_api():
 
     new_subject = Subject(name=data['name'])
 
-    # Gán chủ đề nếu có trong dữ liệu đầu vào
+    #Assign topic if present in input data
     if 'topic_id' in data:
         topic = Topic.query.get(data['topic_id'])
         if topic:
