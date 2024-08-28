@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Toando2003.@localhost/student_management'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -23,23 +24,20 @@ class Topic(db.Model):
     __tablename__ = 'topics'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-
 class Subject(db.Model):
     __tablename__ = 'subjects'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    topic_id = db.Column(db.Integer, db.ForeignKey('topics.id'), nullable=False)
-    topic = db.relationship('Topic', backref=db.backref('subjects', lazy=True))
+    topics = db.relationship('Topic', secondary='subject_topic', backref='subjects')
+
+class SubjectTopic(db.Model):
+    __tablename__ = 'subject_topic'
+    subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), primary_key=True)
+    topic_id = db.Column(db.Integer, db.ForeignKey('topics.id'), primary_key=True)
 class Class(db.Model):
     __tablename__ = 'classes'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-class StudentScore(db.Model):
-    __tablename__ = 'student_scores'
-    id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
-    subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), nullable=False)
-    score = db.Column(db.Float, nullable=False)
 
 def fetch_students():
     students = Student.query.all()
@@ -89,7 +87,6 @@ def get_student(student_id):
             "gpa": student.gpa}})
     else:
         return jsonify({"success": False})
-
 
 # API to add a new student
 @app.route('/api/students', methods=['POST'])
@@ -169,36 +166,59 @@ def get_students_by_class(class_id):
     ]
     return jsonify({"students": students_list})
 
-#API for subject and topic
+#API for topic
 @app.route('/api/topics', methods=['GET'])
 def get_topics():
     topics = Topic.query.all()
     topics_list = [{"id": topic.id, "name": topic.name} for topic in topics]
     return jsonify({"topics": topics_list})
+@app.route('/api/topics', methods=['POST'])
+def add_topic_api():
+    data = request.json
+    new_topic = Topic(name=data['name'])
+    db.session.add(new_topic)
+    db.session.commit()
+    return jsonify({"success": True})
 
+#API for subject
 @app.route('/api/subjects', methods=['GET'])
 def get_subjects():
     subjects = Subject.query.all()
-    subjects_list = [{"id": subject.id, "name": subject.name, "topic": subject.topic.name if subject.topic else "No Topic Assigned"} for subject in subjects]
+    subjects_list = [{"id": subject.id, "name": subject.name} for subject in subjects]
     return jsonify({"subjects": subjects_list})
 
 @app.route('/api/subjects', methods=['POST'])
 def add_subject_api():
     data = request.json
-
     new_subject = Subject(name=data['name'])
-
-    #Assign topic if present in input data
-    if 'topic_id' in data:
-        topic = Topic.query.get(data['topic_id'])
-        if topic:
-            new_subject.topic_id = topic.id
-
     db.session.add(new_subject)
     db.session.commit()
     return jsonify({"success": True})
 
 
+@app.route('/api/subjects/<int:subject_id>/topics', methods=['POST'])
+def add_topics_to_subject(subject_id):
+    data = request.json
+    subject = Subject.query.get(subject_id)
+    if not subject:
+        return jsonify({"success": False, "message": "Subject not found"})
+
+    for topic_id in data['topic_ids']:
+        topic = Topic.query.get(topic_id)
+        if topic:
+            subject.topics.append(topic)
+    db.session.commit()
+    return jsonify({"success": True})
+
+@app.route('/api/subjects/<int:subject_id>/topics', methods=['GET'])
+def get_topics_by_subject(subject_id):
+    subject = Subject.query.get(subject_id)
+    if not subject:
+        return jsonify({"success": False, "message": "Subject not found"})
+
+    topics = subject.topics
+    topics_list = [{"id": topic.id, "name": topic.name} for topic in topics]
+    return jsonify({"success": True, "topics": topics_list})
 
 if __name__ == '__main__':
     app.run(debug=True)
