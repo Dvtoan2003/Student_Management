@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/manage_subject.css') }}">
+    <script src="static/js/manage_subject.js"></script>
+    <title>Manage Subjects</title>
+</head>
+<body>
+    <h1>Manage Subjects</h1>
+
+    <!-- Form to add a new subject -->
+    <h2>Add New Subject</h2>
+    <form id="add-subject-form">
+        <label for="subject_name">Subject Name:</label>
+        <input type="text" id="subject_name" name="name" required>
+        <button type="submit">Add Subject</button>
+    </form>
+
+    <!-- Form to add a new topic -->
+    <h2>Add New Topic</h2>
+    <form id="add-topic-form">
+        <label for="topic_name">Topic Name:</label>
+        <input type="text" id="topic_name" name="name" required>
+        <button type="submit">Add Topic </button>
+    </form>
+     
+    <!-- Form to assign topics to a subject -->
+    <h2>Assign Topics to Subject</h2>
+    <form id="assign-topics-form">
+        <label for="subject_select">Subject:</label>
+        <select id="subject_select" name="subject_id">
+            <!-- Options will be added here by JavaScript -->
+        </select>
+        
+        <label for="topic_select">Topics:</label>
+        <select id="topic_select" name="topic_ids" multiple>
+            <!-- Options will be added here by JavaScript -->
+        </select>
+        
+        <button type="submit">Assign Topics</button>
+    </form>
+
+    <!-- Display topics for a selected subject -->
+    <h2>Topics for Selected Subject</h2>
+    <select id="subject_for_topics">
+        <!-- Options will be added here by JavaScript -->
+    </select>
+    <button id="fetch_topics">Fetch Topics</button>
+    <ul id="topics_list">
+        <!-- Topics will be listed here -->
+    </ul>
+
+    <script src="manage_subject.js"></script>
+</body>
+</html>

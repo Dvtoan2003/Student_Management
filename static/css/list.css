@@ -168,10 +168,9 @@ td{
   }
   
   .left-box button:hover {
-    background-color: rgb(224, 170, 120);
+    background-color: rgb(183, 135, 90);
   }
   
-  /* Image styling */
   .right-box {
     flex: 1;
     display: flex;
