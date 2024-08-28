@@ -1,129 +1,117 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const subjectSelect = document.getElementById('subject_id');
-    const viewSubjectSelect = document.getElementById('view_subject_id');
-    const topicSelect = document.getElementById('topic_id');
-    const topicsList = document.getElementById('topics-list');
+    const addSubjectForm = document.getElementById('add-subject-form');
+    const addTopicForm = document.getElementById('add-topic-form');
+    const assignTopicsForm = document.getElementById('assign-topics-form');
+    const subjectSelect = document.getElementById('subject_select');
+    const topicSelect = document.getElementById('topic_select');
+    const subjectForTopics = document.getElementById('subject_for_topics');
+    const topicsList = document.getElementById('topics_list');
 
-    // Fetch and populate subjects in both dropdowns
-    function loadSubjects() {
-        fetch('/api/subjects')
+    function populateSelect(selectElement, apiEndpoint) {
+        fetch(apiEndpoint) 
             .then(response => response.json())
             .then(data => {
-                subjectSelect.innerHTML = '';
-                viewSubjectSelect.innerHTML = '';
-                data.subjects.forEach(subject => {
+                data[Object.keys(data)[0]].forEach(item => {
                     const option = document.createElement('option');
-                    option.value = subject.id;
-                    option.textContent = subject.name;
-                    subjectSelect.appendChild(option);
-
-                    const viewOption = document.createElement('option');
-                    viewOption.value = subject.id;
-                    viewOption.textContent = subject.name;
-                    viewSubjectSelect.appendChild(viewOption);
+                    option.value = item.id;
+                    option.textContent = item.name;
+                    selectElement.appendChild(option);
                 });
             });
     }
 
-    // Fetch and populate topics
-    function loadTopics() {
-        fetch('/api/topics')
-            .then(response => response.json())
-            .then(data => {
-                topicSelect.innerHTML = '';
-                data.topics.forEach(topic => {
-                    const option = document.createElement('option');
-                    option.value = topic.id;
-                    option.textContent = topic.name;
-                    topicSelect.appendChild(option);
-                });
-            });
-    }
+    populateSelect(subjectSelect, '/api/subjects');
+    populateSelect(topicSelect, '/api/topics');
+    populateSelect(subjectForTopics, '/api/subjects');
 
-    // Add new subject
-    document.getElementById('add-subject-form').addEventListener('submit', function (event) {
+    addSubjectForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        const subjectName = document.getElementById('subject_name').value;
-
+        const formData = new FormData(addSubjectForm);
         fetch('/api/subjects', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: subjectName })
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: formData.get('name') })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 alert('Subject added successfully!');
-                loadSubjects();
+                subjectSelect.innerHTML = ''; 
+                populateSelect(subjectSelect, '/api/subjects');
+                addSubjectForm.reset();
             } else {
                 alert('Failed to add subject.');
             }
         });
     });
 
-    // Add new topic
-    document.getElementById('add-topic-form').addEventListener('submit', function (event) {
+    addTopicForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        const topicName = document.getElementById('topic_name').value;
-
+        const formData = new FormData(addTopicForm);
         fetch('/api/topics', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: topicName })
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: formData.get('name') })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 alert('Topic added successfully!');
-                loadTopics();
+                topicSelect.innerHTML = ''; 
+                populateSelect(topicSelect, '/api/topics');
+                addTopicForm.reset();
             } else {
                 alert('Failed to add topic.');
             }
         });
     });
 
-    // Add topic to subject
-    document.getElementById('add-topic-to-subject-form').addEventListener('submit', function (event) {
+    assignTopicsForm.addEventListener('submit', function (event) {
         event.preventDefault();
+        const selectedTopics = Array.from(topicSelect.selectedOptions).map(option => option.value);
         const subjectId = subjectSelect.value;
-        const topicId = topicSelect.value;
 
         fetch(`/api/subjects/${subjectId}/topics`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ topic_id: topicId })
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ topic_ids: selectedTopics })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Topic added to subject successfully!');
+                alert('Topics assigned to subject successfully!');
             } else {
-                alert('Failed to add topic to subject.');
+                alert('Failed to assign topics to subject.');
             }
         });
     });
 
-    // View topics of a selected subject
-    document.getElementById('view-topics-button').addEventListener('click', function () {
-        const subjectId = viewSubjectSelect.value;
-
+    document.getElementById('fetch_topics').addEventListener('click', function () {
+        const subjectId = subjectForTopics.value;
         fetch(`/api/subjects/${subjectId}/topics`)
             .then(response => response.json())
             .then(data => {
                 topicsList.innerHTML = '';
-                if (data.topics.length > 0) {
+                if (data.success) {
                     data.topics.forEach(topic => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = topic.name;
-                        topicsList.appendChild(listItem);
+                        const li = document.createElement('li');
+                        li.textContent = topic.name;
+                        topicsList.appendChild(li);
                     });
                 } else {
-                    topicsList.textContent = 'No topics found for this subject.';
+                    alert('Failed to fetch topics for this subject.');
                 }
+            })
+            .catch(error => {
+                console.error('Error fetching topics:', error);
+                alert('An error occurred while fetching topics.');
             });
     });
-
-    // Load initial data
-    loadSubjects();
-    loadTopics();
 });
+
