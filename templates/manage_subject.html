@@ -3,53 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/manage_subject.css') }}">
     <script src="static/js/manage_subject.js"></script>
-    <script  src="static/js/subject.js"></script>
     <title>Manage Subjects</title>
 </head>
 <body>
-   <h1>Manage Subject</h1>
+    <h1>Manage Subjects</h1>
 
-   <h2>Add New Subject</h2>
+    <!-- Form to add a new subject -->
+    <h2>Add New Subject</h2>
     <form id="add-subject-form">
         <label for="subject_name">Subject Name:</label>
-        <input type="text" id="subject_name" name="subject_name" required>
+        <input type="text" id="subject_name" name="name" required>
         <button type="submit">Add Subject</button>
     </form>
 
+    <!-- Form to add a new topic -->
     <h2>Add New Topic</h2>
     <form id="add-topic-form">
         <label for="topic_name">Topic Name:</label>
-        <input type="text" id="topic_name" name="topic_name" required>
-        <button type="submit">Add Topic</button>
+        <input type="text" id="topic_name" name="name" required>
+        <button type="submit">Add Topic </button>
+    </form>
+     
+    <!-- Form to assign topics to a subject -->
+    <h2>Assign Topics to Subject</h2>
+    <form id="assign-topics-form">
+        <label for="subject_select">Subject:</label>
+        <select id="subject_select" name="subject_id">
+            <!-- Options will be added here by JavaScript -->
+        </select>
+        
+        <label for="topic_select">Topics:</label>
+        <select id="topic_select" name="topic_ids" multiple>
+            <!-- Options will be added here by JavaScript -->
+        </select>
+        
+        <button type="submit">Assign Topics</button>
     </form>
 
-    <h2>Add Topic to Subject</h2>
-    <form id="add-topic-to-subject-form">
-        <label for="subject_id">Select Subject:</label>
-        <select id="subject_id" name="subject_id" required>
-            <!-- Subjects will be populated here by JavaScript -->
-        </select>
-
-        <label for="topic_id">Select Topic:</label>
-        <select id="topic_id" name="topic_id" required>
-            <!-- Topics will be populated here by JavaScript -->
-        </select>
-        <button type="submit">Add Topic to Subject</button>
-    </form>
-
-    <!-- Section to display topics of a selected subject -->
-    <h2>Topics of Selected Subject</h2>
-    <form id="view-topics-form">
-        <label for="view_subject_id">Select Subject:</label>
-        <select id="view_subject_id" name="view_subject_id" required>
-            <!-- Subjects will be populated here by JavaScript -->
-        </select>
-        <button type="button" id="view-topics-button">View Topics</button>
-    </form>
-    <ul id="topics-list">
-        <!-- Topics will be displayed here -->
+    <!-- Display topics for a selected subject -->
+    <h2>Topics for Selected Subject</h2>
+    <select id="subject_for_topics">
+        <!-- Options will be added here by JavaScript -->
+    </select>
+    <button id="fetch_topics">Fetch Topics</button>
+    <ul id="topics_list">
+        <!-- Topics will be listed here -->
     </ul>
 
+    <script src="manage_subject.js"></script>
 </body>
 </html>
