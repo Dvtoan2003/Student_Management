@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function editStudent(studentId) {
-    fetch(`/api/students/${studentId}`)
+    fetch(`/api/students/${studentId}`) //API get list student
         .then(response => response.json())
         .then(data => {
             if (data.success) {

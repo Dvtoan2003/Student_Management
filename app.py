@@ -43,9 +43,11 @@ def fetch_students():
     students = Student.query.all()
     return students
 
-
 @app.route('/')
 def index():
+    return render_template('index.html')
+@app.route('/list_student')
+def list_student():
     return render_template('list_student.html')
 @app.route('/manage_class')
 def manage_class():
