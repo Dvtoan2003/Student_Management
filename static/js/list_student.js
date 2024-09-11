@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
             editStudentModal.style.display = 'none';
         }
     });
-    
+       
     // Handle Edit Student form submission
     if (editStudentForm) {
         editStudentForm.addEventListener('submit', function (event) {
