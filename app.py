@@ -56,7 +56,6 @@ def manage_class():
 def manage_subject():
     return render_template('manage_subject.html')
 
-
 # API to get all students
 @app.route('/api/students', methods=['GET'])
 def get_students():

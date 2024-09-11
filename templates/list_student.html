@@ -12,7 +12,7 @@
 
 </head>
 
-<body>
+<body x-data="{ addStudentModal: false, editStudentModal: false }">
     <div class="header">
         <div class="logo">
             <img src="https://sport5.mediacdn.vn/thumb_w/480/158855217956261888/2022/3/9/logo-clb-hai-phong-1646820518238831449951.jpeg"
@@ -31,7 +31,7 @@
             <thead>
                 <tr>
                     <th>Student Code</th>
-                    <th>Name</th>
+                    <th>Name</th> 
                     <th>Birth Year</th>
                     <th>Address</th>
                     <th>Class</th>
@@ -46,7 +46,7 @@
         </table>
     </div>
     <!-- Add Student Modal -->
-    <div id="addStudentModal" class="modal">
+    <div id="addStudentModal" class="modal" >
         <div class="modal-content">
             <div class="head-modal">
                 <h2>Add Student</h2>
@@ -82,29 +82,31 @@
 
         </div>
     </div>
-
-    <!-- Edit Student Modal -->
-    <div id="editStudentModal" class="modal">
+    
+    <!--Edit student modal-->
+    <div x-show="editStudentModal" id="editStudentModal" class="modal">
         <div class="modal-content">
             <div class="head-modal">
                 <h2>Edit Student</h2>
-                <span class="close-edit">&times;</span>
+                <span @click="editStudentModal = false" class="close-edit">&times;</span>
             </div>
             <div class="bottom-modal">
-                <form id="edit-student-form" class="left-box">
+                <form id="edit-student-form">
                     <input type="hidden" id="edit-student-id" name="id">
                     <label for="edit-name">Name:</label>
-                    <input type="text" id="edit-name" name="name" required><br><br>
+                    <input type="text" id="edit-name" name="name" required>
+
                     <label for="edit-birth_year">Birth Year:</label>
-                    <input type="number" id="edit-birth_year" name="birth_year" required><br><br>
+                    <input type="number" id="edit-birth_year" name="birth_year" required>
+
                     <label for="edit-address">Address:</label>
-                    <input type="text" id="edit-address" name="address" required><br><br>
+                    <input type="text" id="edit-address" name="address" required>
+
                     <label for="edit-class_">Class:</label>
-                    <select id="class_" name="class_id">
-                        <!-- Các option sẽ được thêm vào đây bằng JavaScript -->
-                    </select><br><br>
+                    <select id="class_" name="class_id"></select>
+
                     <label for="edit-grade">GPA:</label>
-                    <input type="text" id="edit-gpa" name="gpa" required><br><br>
+                    <input type="text" id="edit-gpa" name="gpa" required>
 
                     <button type="submit">Update Student</button>
                 </form>
@@ -113,7 +115,6 @@
                         alt="Logo" />
                 </div>
             </div>
-
         </div>
     </div>
 
