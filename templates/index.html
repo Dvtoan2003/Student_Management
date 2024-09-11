@@ -10,7 +10,7 @@
   <!-- ===============================================-->
   <!--    Document Title-->
   <!-- ===============================================-->
-  <title>Phoenix</title>
+  <title>Capstone Project</title>
 
 
   <!-- ===============================================-->
@@ -28,7 +28,7 @@
   <script src="static/js/config.js"></script>
   <script src="static/js/add_student.js"></script>
   <script src="static/js/list_student.js"></script>
-  
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 
   <!-- ===============================================-->
@@ -91,23 +91,23 @@
                   <div class="d-flex align-items-center">
                     <div class="dropdown-indicator-icon"><span class="fas fa-caret-right"></span></div><span
                       class="nav-link-icon"><span data-feather="pie-chart"></span></span><span
-                      class="nav-link-text">Home</span>
+                      class="nav-link-text">Menu</span>
                   </div>
                 </a>
                 <div class="parent-wrapper label-1">
                   <ul class="nav collapse parent show" data-bs-parent="#navbarVerticalCollapse" id="nv-home">
-                    <li class="collapsed-nav-item-title d-none">Home
+                    <li class="collapsed-nav-item-title d-none">Menu
                     </li>
-                    <li class="nav-item"><a class="nav-link active" href="index.html" data-bs-toggle=""
+                    <li class="nav-item"><a class="nav-link active" href="http://127.0.0.1:5000/manage_class" data-bs-toggle=""
                         aria-expanded="false">
-                        <div class="d-flex align-items-center"><span class="nav-link-text">E commerce</span>
+                        <div class="d-flex align-items-center"><span class="nav-link-text">Manage Class</span>
                         </div>
                       </a>
                       <!-- more inner pages-->
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="dashboard/project-management.html" data-bs-toggle=""
+                    <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:5000/manage_subject" data-bs-toggle=""
                         aria-expanded="false">
-                        <div class="d-flex align-items-center"><span class="nav-link-text">Project management</span>
+                        <div class="d-flex align-items-center"><span class="nav-link-text">Management Subject</span>
                         </div>
                       </a>
                       <!-- more inner pages-->
@@ -305,8 +305,8 @@
                 </div>
               </div>
 
-              
-            
+
+
               <div class="nav-item-wrapper"><a class="nav-link label-1" href="apps/chat.html" role="button"
                   data-bs-toggle="" aria-expanded="false">
                   <div class="d-flex align-items-center"><span class="nav-link-icon"><span
@@ -606,7 +606,7 @@
                       class="fa-solid fa-circle text-info ms-1 new-page-indicator" style="font-size: 6px"></span>
                   </div>
                 </a>
-                
+
               </div>
               <!-- parent pages-->
               <div class="nav-item-wrapper"><a class="nav-link dropdown-indicator label-1" href="#nv-layouts"
@@ -702,7 +702,7 @@
                 </div>
               </div>
             </li>
-            
+
             <li class="nav-item">
               <!-- label-->
               <p class="navbar-vertical-label">Documentation
@@ -999,7 +999,7 @@
                 data-bs-dismiss="search">
                 <button class="btn btn-link btn-close-falcon p-0" aria-label="Close"></button>
               </div>
-              
+
             </div>
           </div>
         </div>
@@ -1009,98 +1009,109 @@
       <div class="mx-n4 px-4 mx-lg-n6 px-lg-6 bg-white pt-7 border-y border-300">
         <div class="button-header">
           <p>List Student</p>
-          <button id="openAddStudentForm">Add Student</button>
         </div>
-      <div class="content">
-        <table id="students-table">
+        <!-- Add Student Modal -->
+        <div class="button-add-student" x-data="{ showAddStudentModal: false }">
+          <button @click="showAddStudentModal = true">Add Student</button>
+
+          <div x-show="showAddStudentModal" class="modal-add-student" @click.away="showAddStudentModal = false">
+            <div class="modal-add-student">
+              <div class="head-modal">
+                <h2>Add Student</h2>
+                <span @click="showAddStudentModal = false" class="close">&times;</span>
+              </div>
+              <div class="bottom-modal">
+                <form id="add-student-form" @submit.prevent="$store.addStudentForm.submitForm()">
+                  <label for="student_code">Student Code:</label>
+                  <input type="text" id="student_code" name="student_code" required>
+
+                  <label for="name">Name:</label>
+                  <input type="text" id="name" name="name" required>
+
+                  <label for="birth_year">Birth Year:</label>
+                  <input type="number" id="birth_year" name="birth_year" required>
+
+                  <label for="address">Address:</label>
+                  <input type="text" id="address" name="address" required>
+
+                  <label for="class_id">Class:</label>
+                  <select id="class_id" name="class_id" required>
+                    <template x-for="classItem in $store.addStudentForm.classList" :key="classItem.id">
+                      <option :value="classItem.id" x-text="classItem.name"></option>
+                    </template>
+                  </select>
+
+                  <label for="gpa">GPA:</label>
+                  <input type="text" step="0.01" id="gpa" name="gpa" required>
+
+                  <button type="submit">Add Student</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="list-student">
+          <table id="students-table">
             <thead>
-                <tr>
-                    <th>Student Code</th>
-                    <th>Name</th>
-                    <th>Birth Year</th>
-                    <th>Address</th>
-                    <th>Class</th>
-                    <th>GPA</th>
-                    <th>Actions</th>
-                </tr>
+              <tr>
+                <th>Student Code</th>
+                <th>Name</th>
+                <th>Birth Year</th>
+                <th>Address</th>
+                <th>Class</th>
+                <th>GPA</th>
+                <th>Actions</th>
+              </tr>
             </thead>
             <tbody>
-
-
+              <template x-for="student in students" :key="student.id">
+                <tr>
+                  <td x-text="student.student_code"></td>
+                  <td x-text="student.name"></td>
+                  <td x-text="student.birth_year"></td>
+                  <td x-text="student.address"></td>
+                  <td x-text="student.class_name"></td>
+                  <td x-text="student.gpa"></td>
+                  <td>
+                    <button @click="openEditModal(student)" class="button-edit-student">Edit</button>
+                    <button @click="deleteStudent(student.id)">Delete</button>
+                  </td>
+                </tr>
+              </template>
             </tbody>
-        </table>
-    </div>
-    <!-- Add Student Modal -->
-    <div id="addStudentModal" class="modal">
-        <div class="modal-content">
-            <div class="head-modal">
-                <h2>Add Student</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="bottom-modal">
-                <form id="add-student-form">
-                    <label for="student_code">Student Code:</label>
-                    <input type="text" id="student_code" name="student_code" required>
-
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required>
-
-                    <label for="birth_year">Birth Year:</label>
-                    <input type="number" id="birth_year" name="birth_year" required>
-
-                    <label for="address">Address:</label>
-                    <input type="text" id="address" name="address" required>
-
-                    <label for="class_id">Class:</label>
-                    <select id="class_id" name="class_id" required>Select Class</select>
-
-                    <label for="gpa">GPA:</label>
-                    <input type="text" step="0.01" id="gpa" name="gpa" required>
-
-                    <button type="submit">Add Student</button>
-                </form>
-                <div class="right-box">
-                    <img src="https://sport5.mediacdn.vn/thumb_w/480/158855217956261888/2022/3/9/logo-clb-hai-phong-1646820518238831449951.jpeg"
-                        alt="Logo" />
-                </div>
-            </div>
-
+          </table>
         </div>
-    </div>
 
-    <!-- Edit Student Modal -->
-    <div id="editStudentModal" class="modal">
-        <div class="modal-content">
+        <!-- Edit Student Modal -->
+        <div x-show="editStudentModal" id="editStudentModal" class="modal">
+          <div class="modal-edit-student">
             <div class="head-modal">
-                <h2>Edit Student</h2>
-                <span class="close-edit">&times;</span>
+              <h2>Edit Student</h2>
+              <span @click="editStudentModal = false" class="close-edit">&times;</span>
             </div>
-            <div class="bottom-modal">
-                <form id="edit-student-form" class="left-box">
-                    <input type="hidden" id="edit-student-id" name="id">
-                    <label for="edit-name">Name:</label>
-                    <input type="text" id="edit-name" name="name" required><br><br>
-                    <label for="edit-birth_year">Birth Year:</label>
-                    <input type="number" id="edit-birth_year" name="birth_year" required><br><br>
-                    <label for="edit-address">Address:</label>
-                    <input type="text" id="edit-address" name="address" required><br><br>
-                    <label for="edit-class_">Class:</label>
-                    <select id="class_" name="class_id">
-                        <!-- Các option sẽ được thêm vào đây bằng JavaScript -->
-                    </select><br><br>
-                    <label for="edit-grade">GPA:</label>
-                    <input type="text" id="edit-gpa" name="gpa" required><br><br>
+            <div class="bottom-modal">  
+              <form id="edit-student-form">
+                <input type="hidden" id="edit-student-id" name="id">
+                <label for="edit-name">Name:</label>
+                <input type="text" id="edit-name" name="name" required>
 
-                    <button type="submit">Update Student</button>
-                </form>
-                <div class="right-box">
-                    <img src="https://sport5.mediacdn.vn/thumb_w/480/158855217956261888/2022/3/9/logo-clb-hai-phong-1646820518238831449951.jpeg"
-                        alt="Logo" />
-                </div>
+                <label for="edit-birth_year">Birth Year:</label>
+                <input type="number" id="edit-birth_year" name="birth_year" required>
+
+                <label for="edit-address">Address:</label>
+                <input type="text" id="edit-address" name="address" required>
+
+                <label for="edit-class_">Class:</label>
+                <select id="class_" name="class_id"></select>
+
+                <label for="edit-grade">GPA:</label>
+                <input type="text" id="edit-gpa" name="gpa" required>
+
+                <button type="submit">Update Student</button>
+              </form>
             </div>
-
+          </div>
         </div>
-    </div>
       </div>
     </div>
     <script>
@@ -1119,53 +1130,7 @@
     <div class="support-chat-container">
       <div class="container-fluid support-chat">
         <div class="card bg-white">
-          <div class="card-header d-flex flex-between-center px-4 py-3 border-bottom">
-            <h5 class="mb-0 d-flex align-items-center gap-2">Demo widget<span
-                class="fa-solid fa-circle text-success fs--3"></span></h5>
-            <div class="btn-reveal-trigger">
-              <button class="btn btn-link p-0 dropdown-toggle dropdown-caret-none transition-none d-flex" type="button"
-                id="support-chat-dropdown" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true"
-                aria-expanded="false" data-bs-reference="parent"><span
-                  class="fas fa-ellipsis-h text-900"></span></button>
-              <div class="dropdown-menu dropdown-menu-end py-2" aria-labelledby="support-chat-dropdown"><a
-                  class="dropdown-item" href="#!">Request a callback</a><a class="dropdown-item" href="#!">Search in
-                  chat</a><a class="dropdown-item" href="#!">Show history</a><a class="dropdown-item" href="#!">Report
-                  to Admin</a><a class="dropdown-item btn-support-chat" href="#!">Close Support</a></div>
-            </div>
-          </div>
-          <div class="card-body chat p-0">
-            <div class="d-flex flex-column-reverse scrollbar h-100 p-3">
-              <div class="text-end mt-6"><a
-                  class="mb-2 d-inline-flex align-items-center text-decoration-none text-1100 hover-bg-soft rounded-pill border border-primary py-2 ps-4 pe-3"
-                  href="#!">
-                  <p class="mb-0 fw-semi-bold fs--1">I need help with something</p><span
-                    class="fa-solid fa-paper-plane text-primary fs--1 ms-3"></span>
-                </a><a
-                  class="mb-2 d-inline-flex align-items-center text-decoration-none text-1100 hover-bg-soft rounded-pill border border-primary py-2 ps-4 pe-3"
-                  href="#!">
-                  <p class="mb-0 fw-semi-bold fs--1">I can’t reorder a product I previously ordered</p><span
-                    class="fa-solid fa-paper-plane text-primary fs--1 ms-3"></span>
-                </a><a
-                  class="mb-2 d-inline-flex align-items-center text-decoration-none text-1100 hover-bg-soft rounded-pill border border-primary py-2 ps-4 pe-3"
-                  href="#!">
-                  <p class="mb-0 fw-semi-bold fs--1">How do I place an order?</p><span
-                    class="fa-solid fa-paper-plane text-primary fs--1 ms-3"></span>
-                </a><a
-                  class="false d-inline-flex align-items-center text-decoration-none text-1100 hover-bg-soft rounded-pill border border-primary py-2 ps-4 pe-3"
-                  href="#!">
-                  <p class="mb-0 fw-semi-bold fs--1">My payment method not working</p><span
-                    class="fa-solid fa-paper-plane text-primary fs--1 ms-3"></span>
-                </a>
-              </div>
-              <div class="text-center mt-auto">
-                <div class="avatar avatar-3xl status-online"><img class="rounded-circle border border-3 border-white"
-                    src="assets/img/team/30.webp" alt="" /></div>
-                <h5 class="mt-2 mb-3">Eric</h5>
-                <p class="text-center text-black mb-0">Ask us anything – we’ll get back to you here or by email within
-                  24 hours.</p>
-              </div>
-            </div>
-          </div>
+
           <div class="card-footer d-flex align-items-center gap-2 border-top ps-3 pe-4 py-3">
             <div class="d-flex align-items-center flex-1 gap-3 border rounded-pill px-4">
               <input class="form-control outline-none border-0 flex-1 fs--1 px-0" type="text"
@@ -1215,7 +1180,7 @@
               data-theme-control="phoenixTheme" />
             <label class="btn d-inline-block btn-navbar-style fs--1" for="themeSwitcherLight"> <span
                 class="mb-2 rounded d-block"><img class="img-fluid img-prototype mb-0"
-                  src="assets/img/generic/default-light.png" alt="" /></span><span
+                  src="static/img/generic/default-light.png" alt="" /></span><span
                 class="label-text">Light</span></label>
           </div>
           <div class="col-6">
@@ -1223,7 +1188,7 @@
               data-theme-control="phoenixTheme" />
             <label class="btn d-inline-block btn-navbar-style fs--1" for="themeSwitcherDark"> <span
                 class="mb-2 rounded d-block"><img class="img-fluid img-prototype mb-0"
-                  src="assets/img/generic/default-dark.png" alt="" /></span><span class="label-text">
+                  src="static/img/generic/default-dark.png" alt="" /></span><span class="label-text">
                 Dark</span></label>
           </div>
         </div>
@@ -1254,8 +1219,8 @@
               data-theme-control="phoenixNavbarPosition" data-page-url="documentation/layouts/vertical-navbar.html" />
             <label class="btn d-inline-block btn-navbar-style fs--1" for="navbarPositionVertical"> <span
                 class="mb-2 rounded d-block"><img class="img-fluid img-prototype d-dark-none"
-                  src="assets/img/generic/default-light.png" alt="" /><img class="img-fluid img-prototype d-light-none"
-                  src="assets/img/generic/default-dark.png" alt="" /></span><span
+                  src="static/img/generic/default-light.png" alt="" /><img class="img-fluid img-prototype d-light-none"
+                  src="static/img/generic/default-dark.png" alt="" /></span><span
                 class="label-text">Vertical</span></label>
           </div>
           <div class="col-6">
@@ -1264,8 +1229,8 @@
               data-page-url="documentation/layouts/horizontal-navbar.html" />
             <label class="btn d-inline-block btn-navbar-style fs--1" for="navbarPositionHorizontal"> <span
                 class="mb-2 rounded d-block"><img class="img-fluid img-prototype d-dark-none"
-                  src="assets/img/generic/top-default.png" alt="" /><img class="img-fluid img-prototype d-light-none"
-                  src="assets/img/generic/top-default-dark.png" alt="" /></span><span class="label-text">
+                  src="static/img/generic/top-default.png" alt="" /><img class="img-fluid img-prototype d-light-none"
+                  src="static/img/generic/top-default-dark.png" alt="" /></span><span class="label-text">
                 Horizontal</span></label>
           </div>
           <div class="col-6">
@@ -1273,7 +1238,7 @@
               data-theme-control="phoenixNavbarPosition" data-page-url="documentation/layouts/combo-navbar.html" />
             <label class="btn d-inline-block btn-navbar-style fs--1" for="navbarPositionCombo"> <span
                 class="mb-2 rounded d-block"><img class="img-fluid img-prototype d-dark-none"
-                  src="assets/img/generic/nav-combo-light.png" alt="" /><img
+                  src="static/img/generic/nav-combo-light.png" alt="" /><img
                   class="img-fluid img-prototype d-light-none" src="assets/img/generic/nav-combo-dark.png"
                   alt="" /></span><span class="label-text"> Combo</span></label>
           </div>
@@ -1282,8 +1247,8 @@
               data-theme-control="phoenixNavbarPosition" data-page-url="documentation/layouts/dual-nav.html" />
             <label class="btn d-inline-block btn-navbar-style fs--1" for="navbarPositionTopDouble"> <span
                 class="mb-2 rounded d-block"><img class="img-fluid img-prototype d-dark-none"
-                  src="assets/img/generic/dual-light.png" alt="" /><img class="img-fluid img-prototype d-light-none"
-                  src="assets/img/generic/dual-dark.png" alt="" /></span><span class="label-text"> Dual
+                  src="static/img/generic/dual-light.png" alt="" /><img class="img-fluid img-prototype d-light-none"
+                  src="static/img/generic/dual-dark.png" alt="" /></span><span class="label-text"> Dual
                 nav</span></label>
           </div>
         </div>
@@ -1295,8 +1260,8 @@
             <input class="btn-check" id="navbar-style-default" type="radio" name="config.name" value="default"
               data-theme-control="phoenixNavbarVerticalStyle" />
             <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-default"> <img
-                class="img-fluid img-prototype d-dark-none" src="assets/img/generic/default-light.png" alt="" /><img
-                class="img-fluid img-prototype d-light-none" src="assets/img/generic/default-dark.png" alt="" /><span
+                class="img-fluid img-prototype d-dark-none" src="static/img/generic/default-light.png" alt="" /><img
+                class="img-fluid img-prototype d-light-none" src="static/img/generic/default-dark.png" alt="" /><span
                 class="label-text d-dark-none"> Default</span><span
                 class="label-text d-light-none">Default</span></label>
           </div>
@@ -1304,8 +1269,8 @@
             <input class="btn-check" id="navbar-style-dark" type="radio" name="config.name" value="darker"
               data-theme-control="phoenixNavbarVerticalStyle" />
             <label class="btn d-block w-100 btn-navbar-style fs--1" for="navbar-style-dark"> <img
-                class="img-fluid img-prototype d-dark-none" src="assets/img/generic/vertical-darker.png" alt="" /><img
-                class="img-fluid img-prototype d-light-none" src="assets/img/generic/vertical-lighter.png"
+                class="img-fluid img-prototype d-dark-none" src="static/img/generic/vertical-darker.png" alt="" /><img
+                class="img-fluid img-prototype d-light-none" src="static/img/generic/vertical-lighter.png"
                 alt="" /><span class="label-text d-dark-none"> Darker</span><span
                 class="label-text d-light-none">Lighter</span></label>
           </div>
@@ -1319,8 +1284,8 @@
               data-theme-control="phoenixNavbarTopShape" data-page-url="documentation/layouts/horizontal-navbar.html" />
             <label class="btn d-inline-block btn-navbar-style fs--1" for="navbarShapeDefault"> <span
                 class="mb-2 rounded d-block"><img class="img-fluid img-prototype d-dark-none mb-0"
-                  src="assets/img/generic/top-default.png" alt="" /><img
-                  class="img-fluid img-prototype d-light-none mb-0" src="assets/img/generic/top-default-dark.png"
+                  src="static/img/generic/top-default.png" alt="" /><img
+                  class="img-fluid img-prototype d-light-none mb-0" src="static/img/generic/top-default-dark.png"
                   alt="" /></span><span class="label-text">Default</span></label>
           </div>
           <div class="col-6">
@@ -1329,8 +1294,8 @@
               data-page-url="documentation/layouts/horizontal-navbar.html#horizontal-navbar-slim" />
             <label class="btn d-inline-block btn-navbar-style fs--1" for="navbarShapeSlim"> <span
                 class="mb-2 rounded d-block"><img class="img-fluid img-prototype d-dark-none mb-0"
-                  src="assets/img/generic/top-slim.png" alt="" /><img class="img-fluid img-prototype d-light-none mb-0"
-                  src="assets/img/generic/top-slim-dark.png" alt="" /></span><span class="label-text">
+                  src="static/img/generic/top-slim.png" alt="" /><img class="img-fluid img-prototype d-light-none mb-0"
+                  src="static/img/generic/top-slim-dark.png" alt="" /></span><span class="label-text">
                 Slim</span></label>
           </div>
         </div>
@@ -1343,8 +1308,8 @@
               data-theme-control="phoenixNavbarTopStyle" />
             <label class="btn d-inline-block btn-navbar-style fs--1" for="navbarTopDefault"> <span
                 class="mb-2 rounded d-block"><img class="img-fluid img-prototype d-dark-none mb-0"
-                  src="assets/img/generic/top-default.png" alt="" /><img
-                  class="img-fluid img-prototype d-light-none mb-0" src="assets/img/generic/top-style-darker.png"
+                  src="static/img/generic/top-default.png" alt="" /><img
+                  class="img-fluid img-prototype d-light-none mb-0" src="static/img/generic/top-style-darker.png"
                   alt="" /></span><span class="label-text">Default</span></label>
           </div>
           <div class="col-6">
@@ -1352,8 +1317,8 @@
               data-theme-control="phoenixNavbarTopStyle" />
             <label class="btn d-inline-block btn-navbar-style fs--1" for="navbarTopDarker"> <span
                 class="mb-2 rounded d-block"><img class="img-fluid img-prototype d-dark-none mb-0"
-                  src="assets/img/generic/navbar-top-style-light.png" alt="" /><img
-                  class="img-fluid img-prototype d-light-none mb-0" src="assets/img/generic/top-style-lighter.png"
+                  src="static/img/generic/navbar-top-style-light.png" alt="" /><img
+                  class="img-fluid img-prototype d-light-none mb-0" src="static/img/generic/top-style-lighter.png"
                   alt="" /></span><span class="label-text d-dark-none">Darker</span><span
                 class="label-text d-light-none">Lighter</span></label>
           </div>
