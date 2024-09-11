@@ -1,207 +1,216 @@
-
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Button Add Student Styles */
+.button-add-student {
+  position: relative;
 }
 
-.logo img {
-    max-width: 50px;
-    height: auto;
-    display: block; 
-    margin: 0 auto;
-}
-.header .text{
-    color: #ff7300;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    font-size: 26px;
-    margin: 10px 20px;
-    padding: 10px 20px;
-    flex-grow: 1;
+.button-add-student button {
+  background-color: #f07d11;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
-.header .button-header button{
-    display: inline-block;
-    margin: 10px;
-    padding: 15px 30px;
-    background-color: #ff7300;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-.header .button-header button:hover {
-    background-color: #d37d55;
-}
-.content{
-    margin-top: 15px;
-    padding: 10px 20px;
+.button-add-student button:hover {
+  background-color: #ee9e09;
 }
 
-
-form label {
-    display: block;
-    margin-top: 10px;
+/* Modal Styles */
+.modal-add-student {
+  position: fixed;
+  width: 70%;
+  height: 60%;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-form input {
-    margin-top: 5px;
+.modal-add-student .modal-add-student {
+  left: 25%;
+  background-color: white;
+  border-radius: 8px;
+  width: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+.modal-add-student .head-modal {
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-table, th, td {
-    border: 1px solid black;
+.modal-add-student .head-modal h2 {
+  margin: 0;
+  color: #ee9e09;
+  align-items: center;
 }
 
-th {
-    padding: 10px;
-    text-align: left;
-    color: #ff9900;
-}
-td{
-    padding: 10px;
-    text-align: left;
-    button{
-        background-color: #ff9900;
-        border-radius: 3px;
-        border:none;
-        margin: 1px;
-        width:50px
-    }
+.modal-add-student .close {
+  font-size: 24px;
+  cursor: pointer;
 }
 
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
+.modal-add-student .bottom-modal {
+  margin-top: 20px;
   
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .head-modal {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-  }
-  
-  /* Close button */
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 38px;
-    font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-    background-color: rgb(255, 0, 0);
-  }
-  
-  /* Form and image container */
-  .bottom-modal {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  /* Form styling */
-  .left-box {
-    flex: 1;
-    margin-right: 20px;
-  }
-  
-  .left-box label {
-    display: block;
-    margin-bottom: 4px;
-    font-weight: bold;
-  }
-  
-  .left-box input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .left-box button {
-    background-color: #ff9900;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .left-box button:hover {
-    background-color: rgb(183, 135, 90);
-  }
-  
-  .right-box {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .right-box img {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 8px;
-  }
-  
-  .close-edit {
-    color: #aaa;
-    float: right; 
-    font-size: 38px;
-    font-weight: bold;
-  }
-  
-  .close-edit:hover,
-  .close-edit:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-    background-color: rgb(255, 0, 0);
-  }
-  @media (max-width: 600px) {
-    .bg-white {
-        padding: 10px;
-        font-size: 14px;
-        margin-top: 20px;
-    }
+}
 
-    .menu {
-        display: none; /* Ẩn menu trên màn hình nhỏ */
-    }
+.modal-add-student form {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+}
 
-    .header {
-        font-size: 18px;
-    }
+.modal-add-student label {
+  margin-bottom: 5px;
+}
+
+.modal-add-student input,
+.modal-add-student select {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.modal-add-student button {
+  background-color: #ee9e09;
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 10px 20px;
+  font-size: 26px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.modal-add-student button:hover {
+  background-color: #c98940;
+}
+
+/* List Student Styles */
+.list-student {
+  padding: 20px;
+}
+
+#students-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#students-table th,
+#students-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+#students-table th {
+  background-color: #c98940;
+  color: white;
+}
+
+#students-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#students-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.button-edit-student {
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.button-edit-student:hover {
+  background-color: #e0a800;
+}
+
+/* Edit Student Modal Styles */
+#editStudentModal {
+  top: 35%;
+  left: 35%;
+  display: none;
+  position: fixed;
+  width: 70%;
+  height: 60%;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-edit-student {
+  padding: 10px 20px;
+  background-color: white;
+  border-radius: 8px;
+  width: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-edit-student .head-modal {
+  padding: 10px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-edit-student .head-modal h2 {
+  margin: 0;
+  color: #c98940;
+}
+
+.modal-edit-student .close-edit {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-edit-student .bottom-modal {
+  margin-top: 20px;
+}
+
+.modal-edit-student form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-edit-student label {
+  margin-bottom: 5px;
+}
+
+.modal-edit-student input,
+.modal-edit-student select {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.modal-edit-student button {
+  background-color: #eca240;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.modal-edit-student button:hover {
+  background-color: #df9550;
 }
