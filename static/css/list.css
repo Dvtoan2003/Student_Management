@@ -143,7 +143,7 @@
 
 /* Edit Student Modal Styles */
 #editStudentModal {
-  top: 35%;
+  top: 30%;
   left: 35%;
   display: none;
   position: fixed;
@@ -180,7 +180,7 @@
 }
 
 .modal-edit-student .bottom-modal {
-  margin-top: 20px;
+  margin-top: 18px;
 }
 
 .modal-edit-student form {
@@ -194,7 +194,7 @@
 
 .modal-edit-student input,
 .modal-edit-student select {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
