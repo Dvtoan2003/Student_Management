@@ -1,56 +1,62 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const classList = document.getElementById('class-list');
-    const studentList = document.getElementById('student-list');
-    const addClassForm = document.getElementById('add-class-form');
+document.addEventListener('alpine:init', () => {
+    Alpine.data('manageClasses', () => ({
+        classes: [],
+        students: [],
+        selectedClassName: '',
+        loadClasses() {
+            fetch('/api/classes')
+                .then(response => response.json())
+                .then(data => {
+                    this.classes = data.classes;
+                });
+        },
+        loadStudentsByClass(classId) {
+            const selectedClass = this.classes.find(classItem => classItem.id === classId);
+            this.selectedClassName = selectedClass ? selectedClass.name : '';
 
-    // Function to load all classes
-    function loadClasses() {
-        fetch('/api/classes')
+            fetch(`/api/classes/${classId}/students`)
+                .then(response => response.json())
+                .then(data => {
+                    this.students = data.students;
+                });
+        },
+        addClass(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            fetch('/api/classes', {
+                method: 'POST',
+                body: formData
+            })
             .then(response => response.json())
             .then(data => {
-                classList.innerHTML = '';
-                data.classes.forEach(class_ => {
-                    const li = document.createElement('li');
-                    li.textContent = class_.name;
-                    li.dataset.classId = class_.id;
-                    li.addEventListener('click', () => loadStudentsByClass(class_.id));
-                    classList.appendChild(li);
-                });
+                if (data.success) {
+                    alert('Class added successfully!');
+                    event.target.reset();
+                    this.loadClasses(); // Reload the classes list
+                } else {
+                    alert('Failed to add class.');
+                }
             });
-    }
-    // Function to load students by class ID
-    function loadStudentsByClass(classId) {
-        fetch(`/api/classes/${classId}/students`)
-            .then(response => response.json())
-            .then(data => {
-                studentList.innerHTML = '';
-                data.students.forEach(student => {
-                    const li = document.createElement('li');
-                    li.textContent = `${student.name} (${student.student_code})`;
-                    studentList.appendChild(li);
+        },
+        deleteClass(classId) {
+            if (confirm('Are you sure you want to delete this class?')) {
+                fetch(`/api/classes/${classId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())  
+                .then(data => {
+                    if (data.success) {
+                        alert('Class deleted successfully!');
+                        this.loadClasses(); // Reload the classes list after deletion
+                    } else {
+                        alert('Failed to delete class.');
+                    }
                 });
-            });
-    }
-    // Event listener for adding a new class
-    addClassForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(addClassForm);
-        
-        fetch('/api/classes', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Class added successfully!');
-                addClassForm.reset();
-                loadClasses(); // Reload the classes list
-            } else {
-                alert('Failed to add class.');
             }
-        });
-    });
-    
-    loadClasses();
+        },
+        init() {
+            this.loadClasses();
+        }
+    }));
 });
