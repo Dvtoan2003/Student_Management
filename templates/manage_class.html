@@ -3,31 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="{{ url_for('static', filename='js/manage_class.js') }}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/manage_class.css') }}">
-    <script src="static/js/manage_class.js"></script>
-    
     <title>Manage Class</title>
 </head>
-<body>
-    <h1>Manage Classes</h1>
-    <!-- Form to add a new class -->
-    <form id="add-class-form">
-        <label for="class_name">Class Name:</label>
-        <input type="text" id="class_name" name="class_name" required>
-        <button type="submit">Add Class</button>
-    </form>
+<body x-data="manageClasses" x-init="init()" class="container mx-auto p-6">
+  <h1 class="text-3xl font-bold mb-6">Manage Classes</h1>
 
-    <!-- List of classes -->
-    <h2>Classes</h2>
-    <ul id="class-list">
-        <!-- Classes will be loaded here -->
-    </ul>
+  <!-- Form to add a new class -->
+  <form id="add-class-form" @submit.prevent="addClass" class="mb-6">
+      <div class="form-control mb-4">
+          <label for="class_name" class="label">Class Name:</label>
+          <input type="text" id="class_name" name="class_name" required class="input input-bordered w-full" placeholder="Enter class name">
+      </div>
+      <button type="submit" class="btn btn-primary w-full">Add Class</button>
+  </form>
 
-    <!-- Students in selected class -->
-    <h2>Students in Selected Class</h2>
-    <ul id="student-list">
-        <!-- Students will be loaded here -->
-    </ul>
-    
+  <!-- List of classes -->
+  <div class="mb-6">
+      <h2 class="text-2xl font-semibold mb-4">Classes</h2>
+      <ul id="class-list" class="list-disc pl-5 space-y-2">
+          <template x-for="classItem in classes" :key="classItem.id">
+              <li class="flex justify-between items-center cursor-pointer hover:text-primary">
+                  <span @click="loadStudentsByClass(classItem.id)" x-text="classItem.name" class="block p-2 bg-base-200 rounded-md w-full"></span>
+                  <button @click="deleteClass(classItem.id)" class="btn btn-error ml-4">Delete</button>
+              </li>
+          </template>
+      </ul>
+  </div>
+
+  <!-- Students in selected class -->
+  <div>
+    <h2 class="text-2xl font-semibold mb-4">Students in Class: <span x-text="selectedClassName" class="text-primary"></span></h2>
+      <ul id="student-list" class="list-disc pl-5 space-y-2">
+          <template x-for="student in students">
+              <li class="bg-base-200 p-2 rounded-md">
+                  <span x-text="`${student.name} (${student.student_code})`"></span>
+              </li>
+          </template>
+      </ul>
+  </div>
 </body>
 </html>
