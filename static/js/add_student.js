@@ -5,7 +5,7 @@ document.addEventListener('alpine:init', () => {
             this.fetchClasses();
         },
         fetchClasses() {
-            fetch('/api/classes') // Giả sử API trả về danh sách lớp
+            fetch('/api/classes') // API trả về danh sách lớp
                 .then(response => response.json())
                 .then(data => {
                     this.classList = data.classes;
@@ -13,10 +13,10 @@ document.addEventListener('alpine:init', () => {
         },
         submitForm() {
             const formData = new FormData(document.getElementById('add-student-form'));
-            fetch('/api/students', {  // Giả sử API POST tới /api/students
+            fetch('/api/students', {  // API POST tới /api/students
                 method: 'POST',
                 body: formData
-            })
+            })  
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
