@@ -55,6 +55,9 @@ def manage_class():
 @app.route("/manage_subject")
 def manage_subject():
     return render_template('manage_subject.html')
+@app.route("/test_alpine_class")
+def test_alpine_class():
+    return render_template('test_alpine_class.html')
 
 # API to get all students
 @app.route('/api/students', methods=['GET'])
@@ -158,6 +161,14 @@ def add_class():
         db.session.commit()
         return jsonify({'success': True})
     return jsonify({'success': False, 'error': 'Class name is required'}), 400
+@app.route('/api/classes/<int:class_id>', methods=['DELETE'])
+def delete_class(class_id):
+    class_to_delete = Class.query.get(class_id)
+    if class_to_delete:
+        db.session.delete(class_to_delete)
+        db.session.commit()
+        return jsonify({'success': True})
+    return jsonify({'success': False, 'error': 'Class not found'}), 404
 @app.route('/api/classes/<int:class_id>/students', methods=['GET'])
 def get_students_by_class(class_id):
     students = Student.query.filter_by(class_id=class_id).all()
