@@ -3,56 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/manage_subject.css') }}">
     <script src="static/js/manage_subject.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <title>Manage Subjects</title>
 </head>
-<body>
-    <h1>Manage Subjects</h1>
+<body x-data="manageSubjects()" x-init="init()" class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Manage Subjects</h1>
 
-    <!-- Form to add a new subject -->
-    <h2>Add New Subject</h2>
-    <form id="add-subject-form">
-        <label for="subject_name">Subject Name:</label>
-        <input type="text" id="subject_name" name="name" required>
-        <button type="submit">Add Subject</button>
-    </form>
-
-    <!-- Form to add a new topic -->
-    <h2>Add New Topic</h2>
-    <form id="add-topic-form">
-        <label for="topic_name">Topic Name:</label>
-        <input type="text" id="topic_name" name="name" required>
-        <button type="submit">Add Topic </button>
-    </form>
-     
+    <div class="flex">
+        <!-- Form to add a new subject -->
+        <form id="add-subject-form" @submit.prevent="addSubject" class="mb-6">
+            <div class="form-control mb-4">
+                <label for="subject_name" class="label">Add New Subject:</label>
+                <input type="text" id="subject_name" name="name" required class="input input-bordered w-full" placeholder="Enter subject name">
+            </div>
+            <button type="submit" class="btn btn-primary w-full">Add Subject</button>
+        </form>
+        <!--Form to add new subject--> 
+        <form id="add-topic-form" @submit.prevent="addTopic" class="mb-6">
+            <div class="form-control mb-4">
+                <label for="topic_name" class="label">Add New Topic:</label>
+                <input type="text" id="topic_name" name="name" required class="input input-bordered w-full" placeholder="Enter topic name">
+            </div>
+            <button type="submit" class="btn btn-primary w-full">Add Topic</button>
+        </form>
+    </div>
+    
     <!-- Form to assign topics to a subject -->
-    <h2>Assign Topics to Subject</h2>
-    <form id="assign-topics-form">
-        <label for="subject_select">Subject:</label>
-        <select id="subject_select" name="subject_id">
-            <!-- Options will be added here by JavaScript -->
-        </select>
+    <h2 class="text-2xl font-semibold mb-4">Assign Topics to Subject</h2>
+    <form id="assign-topics-form" @submit.prevent="assignTopicsToSubject" class="mb-6">
+        <div class="form-control mb-4">
+            <label for="subject_select" class="label">Subject:</label>
+            <select id="subject_select" name="subject_id" class="select select-bordered w-full" x-model="selectedSubject">
+                <option value="" disabled>Select subject</option>
+                <template x-for="subject in subjects" :key="subject.id">
+                    <option :value="subject.id" x-text="subject.name"></option>
+                </template>
+            </select>
+        </div>
         
-        <label for="topic_select">Topics:</label>
-        <select id="topic_select" name="topic_ids" multiple>
-            <!-- Options will be added here by JavaScript -->
-        </select>
-        
-        <button type="submit">Assign Topics</button>
+        <div class="form-control mb-4">
+            <label for="topic_select" class="label">Topics:</label>
+            <select id="topic_select" name="topic_ids" multiple class="select select-bordered w-full" x-model="selectedTopics">
+                <template x-for="topic in topics" :key="topic.id">
+                    <option :value="topic.id" x-text="topic.name"></option>
+                </template>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-full">Assign Topics</button>
     </form>
 
     <!-- Display topics for a selected subject -->
-    <h2>Topics for Selected Subject</h2>
-    <select id="subject_for_topics">
-        <!-- Options will be added here by JavaScript -->
-    </select>
-    <button id="fetch_topics">Fetch Topics</button>
-    <ul id="topics_list">
-        <!-- Topics will be listed here -->
+    <h2 class="text-2xl font-semibold mb-4">Topics for Selected Subject</h2>
+    <div class="form-control mb-4">
+        <select id="subject_for_topics" class="select select-bordered w-full" x-model="subjectForTopics">
+            <option value="" disabled>Select subject</option>
+            <template x-for="subject in subjects" :key="subject.id">
+                <option :value="subject.id" x-text="subject.name"></option>
+            </template>
+        </select>
+    </div>
+    <button id="fetch_topics" @click="fetchTopicsForSubject" class="btn btn-primary w-full mb-4">Fetch Topics</button>
+    
+    <ul id="topics_list" class="list-disc pl-5">
+        <template x-for="topic in assignedTopics" :key="topic.id">
+            <li x-text="topic.name"></li>
+        </template>
     </ul>
-
-    <script src="manage_subject.js"></script>
 </body>
 </html>
